@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
+using ToDoListWebApi.Application.Interfaces;
+using ToDoListWebApi.Domain.Entities;
+using ToDoListWebApi.Domain.Enums;
 
 namespace ToDoListWebApi.Controllers;
 
@@ -7,44 +9,38 @@ namespace ToDoListWebApi.Controllers;
 [Route("[controller]")]
 public class ToDoListController : ControllerBase
 {
-    static List<ToDoItem> _toDoList = [];
+    private readonly IToDoListRepository _repository;
+
+    public ToDoListController(IToDoListRepository repository)
+    {
+        _repository = repository;
+    }
 
     [HttpGet("GetAll")]
     public List<ToDoItem> GetAll()
     {
-        return _toDoList;
+        return _repository.GetAll();
     }
-
-    [HttpGet("Enumerable")]
-    public List<ToDoItem> Enumerable(string name)
-    {
-        var neededElement = _toDoList.Where(x => x.Title.Contains(name));
-        _toDoList.Add(new ToDoItem() { Title = "string"});
-        var example = neededElement.ToList();
-
-        return example;
-    }
-
+    
     [HttpPost("AddItem")]
-    public string AddItem(ToDoItem item)
+    public IActionResult AddItem(ToDoItem item)
     {
-        _toDoList.Add(item);
+        _repository.AddItem(item);
 
-        return "Успешно добавлено";
+        return Ok("Успешно добавлено");
     }
 
     [HttpDelete("DeleteItem")]
-    public IActionResult DeleteItem(int id)
+    public IActionResult DeleteItem(Guid id)
     {
-        var deleteItem = _toDoList.FirstOrDefault(x => x.Id == id);
-
-        if (deleteItem == null)
-        {
-            return NotFound("Дело не найдено");
-        }
-
-        _toDoList.Remove(deleteItem);
-
-        return Ok("Успешно удалено");
+        var result = _repository.DeleteItem(id);
+        
+        return result ? Ok("Успешно удален") : NotFound("Не найдено дело");
+    }
+    
+    [HttpPost("GetItemsWithFilters")]
+    public List<ToDoItem> GetItemsWithFilters(Priority? priority, bool? isCompleted, DateTime? deadline)
+    {
+        return _repository.GetItemsWithFilters(priority, isCompleted, deadline);
     }
 }
