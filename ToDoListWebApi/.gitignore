@@ -1,0 +1,73 @@
+# Build artifacts
+bin/
+obj/
+out/
+build/
+publish/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# Rider/Visual Studio
+.idea/
+.vs/
+.vscode/
+*.swp
+*.swo
+
+# NuGet packages
+packages/
+*.nupkg
+*.snupkg
+
+# Package references
+project.lock.json
+project.assets.json
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.html
+*.tmp
+
+# Logs
+*.log
+*.logs/
+
+# Entity Framework
+*.dbmdl
+*.dbmdl.gz
+
+# Migrations (optional - only if you want to exclude)
+# Migrations/
+
+# Temp files
+*.tmp
+*.temp
+~$*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Publish profiles
+Properties/PublishProfiles/*.pubxml.user
+
+# Connection strings config
+appsettings.Local.json
+secrets.json
+
+# HTTP request files (if using REST client)
+*.http
+*.rest
+
+# Backup files
+*.backup
+*.bak
