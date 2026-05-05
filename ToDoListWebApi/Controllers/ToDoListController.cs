@@ -31,7 +31,7 @@ public class ToDoListController : ControllerBase
     }
 
     [HttpDelete("DeleteItem")]
-    public IActionResult DeleteItem(Guid id)
+    public IActionResult DeleteItem(string id)
     {
         var result = _repository.DeleteItem(id);
         

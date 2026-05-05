@@ -4,6 +4,7 @@ obj/
 out/
 build/
 publish/
+Docker/Data/*
 
 # User-specific files
 *.suo

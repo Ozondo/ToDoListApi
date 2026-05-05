@@ -1,0 +1,11 @@
+name: todolist-app
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: todolist-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db

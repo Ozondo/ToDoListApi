@@ -8,6 +8,6 @@ public interface IToDoListRepository
 {
     public List<ToDoItem> GetAll();
     public void AddItem(ToDoItem item);
-    public bool DeleteItem(Guid id);
+    public bool DeleteItem(string id);
     public List<ToDoItem> GetItemsWithFilters(Priority? priority, bool? isCompleted, DateTime? deadline);
 }

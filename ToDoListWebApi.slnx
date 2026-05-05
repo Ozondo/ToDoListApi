@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/Docker/">
+    <File Path="Docker/docker-compose.yml" />
+  </Folder>
   <Project Path="ToDoListWebApi/ToDoListWebApi.csproj" />
 </Solution>
