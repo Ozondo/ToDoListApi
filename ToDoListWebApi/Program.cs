@@ -1,12 +1,14 @@
 using ToDoListWebApi;
-using ToDoListWebApi.Application.Interfaces;
-using ToDoListWebApi.Infrastructure.Repositories;
+using ToDoListWebApi.ToDoList;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// MongoDB Configuration
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
+
 builder.Services.AddSingleton(serviceProvider =>
 {
     var options = serviceProvider.GetRequiredService<
@@ -14,10 +16,12 @@ builder.Services.AddSingleton(serviceProvider =>
     return options.Value;
 });
 
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IToDoListRepository, ToDoRepository>();
+// Модули приложения
+builder.Services.AddToDoListModule();
 
 var app = builder.Build();
 
