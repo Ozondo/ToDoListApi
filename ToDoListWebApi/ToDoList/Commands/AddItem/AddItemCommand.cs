@@ -1,10 +1,10 @@
-using MongoDB.Bson.Serialization.Attributes;
 using ToDoListWebApi.Domain.Enums;
 
-namespace ToDoListWebApi.ToDoList.Commands;
+namespace ToDoListWebApi.ToDoList.Commands.AddItem;
 
 public class AddItemCommand
 {
+    public string UserId { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Priority Priority { get; set; }

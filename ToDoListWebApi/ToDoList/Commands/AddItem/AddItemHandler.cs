@@ -1,5 +1,6 @@
 using ToDoListWebApi.Domain.Entities;
 using ToDoListWebApi.Domain.Enums;
+using ToDoListWebApi.ToDoList.Commands.AddItem;
 
 namespace ToDoListWebApi.ToDoList.Commands;
 
@@ -28,13 +29,13 @@ public class AddItemHandler
             return false;
         }
 
-        var item = new ToDoItem
-        {
-            Title = command.Title,
-            Description = command.Description,
-            Deadline = command.Deadline,
-            Priority = command.Priority
-        };
+        var item = new ToDoItem(
+            command.UserId,
+            command.Title,
+            command.Description,
+            command.Priority,
+            command.Deadline
+            );
 
         _repository.AddItem(item);
 

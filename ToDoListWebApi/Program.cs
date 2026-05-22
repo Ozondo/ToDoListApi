@@ -1,5 +1,6 @@
 using ToDoListWebApi;
 using ToDoListWebApi.ToDoList;
+using ToDoListWebApi.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 // Модули приложения
 builder.Services.AddToDoListModule();
+builder.Services.AddUsersModule();
 
 var app = builder.Build();
 
