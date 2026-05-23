@@ -1,20 +1,24 @@
 using ToDoListWebApi.Domain.Entities;
 using ToDoListWebApi.Domain.Enums;
 using ToDoListWebApi.ToDoList.Commands.AddItem;
+using ToDoListWebApi.Users.IdAcess;
 
 namespace ToDoListWebApi.ToDoList.Commands;
 
 public class AddItemHandler
 {
     private readonly IToDoListRepository _repository;
+    private readonly ICurrentUserContext _currentUser;
 
-    public AddItemHandler(IToDoListRepository repository)
+    public AddItemHandler(IToDoListRepository repository, ICurrentUserContext currentUser)
     {
         _repository = repository;
+        _currentUser = currentUser;
     }
 
     public bool Handle(AddItemCommand command)
     {
+        var userId = _currentUser.GetRequiredUserId();
         if (string.IsNullOrEmpty(command.Title.Replace(" ", "")))
         {
             return false;
@@ -30,7 +34,7 @@ public class AddItemHandler
         }
 
         var item = new ToDoItem(
-            command.UserId,
+            userId,
             command.Title,
             command.Description,
             command.Priority,

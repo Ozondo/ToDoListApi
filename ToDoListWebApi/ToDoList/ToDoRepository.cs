@@ -5,6 +5,8 @@ namespace ToDoListWebApi.ToDoList;
 
 public class ToDoRepository: IToDoListRepository
 {
+    private const string _collectionName = "ToDoItems";
+
     private readonly IMongoCollection<ToDoItem> _toDoCollection;
     
     public ToDoRepository(MongoDbSettings mongoSettings)
@@ -12,7 +14,7 @@ public class ToDoRepository: IToDoListRepository
         var mongoClient = new MongoClient(mongoSettings.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(mongoSettings.DatabaseName);
 
-        _toDoCollection = mongoDatabase.GetCollection<ToDoItem>(mongoSettings.ToDoCollectionName);
+        _toDoCollection = mongoDatabase.GetCollection<ToDoItem>(_collectionName);
     }
     
     public async Task<List<ToDoItem>> GetAll()

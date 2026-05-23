@@ -1,29 +1,38 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using ToDoListWebApi.Users.Commands.Login;
 using ToDoListWebApi.Users.Commands.Registration;
-using ToDoListWebApi.Users.Entities;
 
 namespace ToDoListWebApi.Users;
 
 [ApiController]
 [Route("[controller]")]
-public class UsersController: ControllerBase
+public class UsersController(
+    RegistrationHandler registrationHandler,
+    LoginHandler loginHandler) : ControllerBase
 {
-    private readonly RegistrationHandler _registrationHandler;
-
-    public UsersController(RegistrationHandler registrationHandler)
-    {
-        _registrationHandler = registrationHandler;
-    }
-    
     [HttpPost("RegisterUser")]
-    public async Task<IActionResult> RegisterUser(RegistrationCommand user)   
+    public async Task<IActionResult> RegisterUser(RegistrationCommand user)
     {
         try
         {
-            await _registrationHandler.Handle(user);
-            
+            await registrationHandler.Handle(user);
+
             return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login(LoginCommand command)
+    {
+        try
+        {
+            var result = await loginHandler.Handle(command);
+
+            return Ok(result);
         }
         catch (Exception ex)
         {

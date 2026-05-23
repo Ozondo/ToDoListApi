@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListWebApi.Domain.Entities;
 using ToDoListWebApi.ToDoList.Commands;
@@ -9,6 +10,7 @@ using ToDoListWebApi.ToDoList.Queries.GetAllItemsWithFilters;
 namespace ToDoListWebApi.ToDoList;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class ToDoListController : ControllerBase
 {
