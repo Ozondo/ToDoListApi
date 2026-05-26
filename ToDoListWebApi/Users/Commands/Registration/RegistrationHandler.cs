@@ -11,13 +11,13 @@ public class RegistrationHandler
     {
         _repository = repository;
     }
-    
+
     public async Task<bool> Handle(RegistrationCommand command)
     {
         command.Username = command.Username.Trim();
         command.Password = command.Password.Trim();
-        
-        if (await _repository.IsLoginExist(command.Username))
+
+        if (await _repository.GetByUsername(command.Username) is not null)
         {
             throw new InvalidOperationException("User is already registered");
         }
@@ -26,12 +26,12 @@ public class RegistrationHandler
         {
             throw new InvalidOperationException("Password is required");
         }
-        
+
         if (string.IsNullOrEmpty(command.Username) || command.Username.Length < 5)
         {
             throw new InvalidOperationException("Username is required");
         }
-        
+
         var passwordHasher = new PasswordHasher<User>();
 
         var newUser = new User(command.Username, passwordHasher.HashPassword(null, command.Password));
