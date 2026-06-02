@@ -1,3 +1,3 @@
 namespace ToDoListWebApi.Users.Commands.Login;
 
-public record LoginResponce(string Token);
+public record LoginResponse(string Token);

@@ -6,7 +6,7 @@ namespace ToDoListWebApi.ToDoList;
 public interface IToDoListRepository
 {
     public Task<List<ToDoItem>> GetAll();
-    public bool AddItem(ToDoItem item);
-    public bool DeleteItem(string id);
-    public List<ToDoItem> GetItemsWithFilters(FilterDefinition<ToDoItem> filter);
+    public Task<bool> AddItem(ToDoItem item);
+    public Task<bool> DeleteItem(string id);
+    public Task<List<ToDoItem>> GetItemsWithFilters(FilterDefinition<ToDoItem> filter);
 }

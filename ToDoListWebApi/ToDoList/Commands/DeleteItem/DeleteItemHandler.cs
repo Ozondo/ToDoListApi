@@ -13,6 +13,6 @@ public class DeleteItemHandler
     {
         var result = _repository.DeleteItem(command.Id);
         
-        return result;
+        return result.Result;
     }
 }

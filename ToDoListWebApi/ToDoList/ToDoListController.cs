@@ -52,8 +52,8 @@ public class ToDoListController : ControllerBase
     }
     
     [HttpPost("GetItemsWithFilters")]
-    public List<ToDoItem> GetItemsWithFilters(GetAllItemsWithFiltersQuery query)
+    public async Task<List<ToDoItem>> GetItemsWithFilters(GetAllItemsWithFiltersQuery query)
     {
-        return _getAllFiltersHandler.Handle(query);
+        return await _getAllFiltersHandler.Handle(query);
     }
 }

@@ -1,24 +1,29 @@
 using MongoDB.Driver;
 using ToDoListWebApi.Domain.Entities;
+using ToDoListWebApi.Users.IdAcess;
 
 namespace ToDoListWebApi.ToDoList.Queries.GetAllItemsWithFilters;
 
 public class GetAllItemsWithFiltersHandler
 {
     private readonly IToDoListRepository _repository;
+    private readonly ICurrentUserContext _currentUser;
+    
 
-    public GetAllItemsWithFiltersHandler(IToDoListRepository repository)
+    public GetAllItemsWithFiltersHandler(IToDoListRepository repository, ICurrentUserContext currentUser)
     {
         _repository = repository;
+        _currentUser = currentUser;
     }
 
-    public List<ToDoItem> Handle(GetAllItemsWithFiltersQuery command)
+    public async Task<List<ToDoItem>> Handle(GetAllItemsWithFiltersQuery command)
     {
         var filter = Builders<ToDoItem>.Filter.Empty;
+        filter &= Builders<ToDoItem>.Filter.Where(item => item.UserId == _currentUser.GetRequiredUserId());
         
         if (command.Priority == null && command.IsCompleted == null && command.DeadLine == null)
         {
-            return _repository.GetItemsWithFilters(filter);
+            return await _repository.GetItemsWithFilters(filter);
         }
 
         if (command.Priority.HasValue)
@@ -36,6 +41,6 @@ public class GetAllItemsWithFiltersHandler
             filter &= Builders<ToDoItem>.Filter.Eq(item => item.Deadline, command.DeadLine.Value);
         }
 
-        return _repository.GetItemsWithFilters(filter);
+        return await _repository.GetItemsWithFilters(filter);
     }
 }

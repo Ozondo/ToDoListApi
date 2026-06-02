@@ -1,4 +1,4 @@
-namespace ToDoListWebApi;
+namespace ToDoListWebApi.Config;
 
 public class JwtSettings
 {

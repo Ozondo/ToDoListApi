@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ToDoListWebApi.Config;
 using ToDoListWebApi.Users.Entities;
 
 namespace ToDoListWebApi.Users.Commands.Login;
@@ -19,7 +20,7 @@ public class LoginHandler
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<LoginResponce> Handle(LoginCommand command)
+    public async Task<LoginResponse> Handle(LoginCommand command)
     {
         command.Username = command.Username.Trim();
         command.Password = command.Password.Trim();
@@ -39,7 +40,7 @@ public class LoginHandler
 
         var token = GenerateToken(user);
 
-        return new LoginResponce(token);
+        return new LoginResponse(token);
     }
 
     private string GenerateToken(User user)

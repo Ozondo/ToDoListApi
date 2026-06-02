@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using ToDoListWebApi.Domain.Entities;
+using ToDoListWebApi.Users.IdAcess;
 
 namespace ToDoListWebApi.ToDoList;
 
@@ -8,43 +9,45 @@ public class ToDoRepository: IToDoListRepository
     private const string _collectionName = "ToDoItems";
 
     private readonly IMongoCollection<ToDoItem> _toDoCollection;
+    private readonly ICurrentUserContext _currentUser;
     
-    public ToDoRepository(MongoDbSettings mongoSettings)
+    public ToDoRepository(MongoDbSettings mongoSettings, ICurrentUserContext currentUser)
     {
         var mongoClient = new MongoClient(mongoSettings.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(mongoSettings.DatabaseName);
 
         _toDoCollection = mongoDatabase.GetCollection<ToDoItem>(_collectionName);
+        _currentUser = currentUser;
     }
     
     public async Task<List<ToDoItem>> GetAll()
     {
-        return await _toDoCollection.Find(_ => true).ToListAsync();
+        return await _toDoCollection.Find(e => e.UserId == _currentUser.GetRequiredUserId()).ToListAsync();
     }
 
-    public bool AddItem(ToDoItem item)
+    public async Task<bool> AddItem(ToDoItem item)
     {
-        _toDoCollection.InsertOne(item);
+        await _toDoCollection.InsertOneAsync(item);
 
         return true;
     }
 
-    public bool DeleteItem(string id)
+    public async Task<bool> DeleteItem(string id)
     {
-        var deleteItem = _toDoCollection.Find(item => item.Id == id).FirstOrDefault();
+        var deleteItem = _toDoCollection.Find(item => item.Id == id && item.UserId == _currentUser.GetRequiredUserId()).FirstOrDefault();
         
         if (deleteItem == null)
         {
-            return false;
+            throw new InvalidOperationException("Item with this id does not exist");
         }
         
-        _toDoCollection.DeleteOne(item => item.Id == id);
+        await _toDoCollection.DeleteOneAsync(item => item.Id == id);
         
         return true;
     }
 
-    public List<ToDoItem> GetItemsWithFilters(FilterDefinition<ToDoItem> filter)
+    public async Task<List<ToDoItem>> GetItemsWithFilters(FilterDefinition<ToDoItem> filter)
     {
-        return _toDoCollection.Find(filter).ToList();
+        return await _toDoCollection.Find(filter).ToListAsync();
     }
 }
